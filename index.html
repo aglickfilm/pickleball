@@ -150,6 +150,18 @@ h1,h2{font-family:var(--display);font-weight:900;line-height:1.02;letter-spacing
 .house p{font-size:17px;color:var(--ink)}
 .house .marker{display:block;font-size:20px;color:var(--court-d);margin-top:10px}
 .house-mini{background:var(--lime);border:2.5px solid var(--ink);border-radius:999px;padding:8px 14px;margin-top:14px;text-align:center;font-weight:800;font-size:15px;color:var(--ink)}
+/* teams page */
+.tcards{display:grid;gap:14px;margin-top:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.tcard{background:var(--white);border:2.5px solid var(--ink);border-radius:20px;padding:14px 16px 16px;box-shadow:4px 4px 0 var(--court);min-width:0}
+.tcard:nth-child(3n+2){background:var(--pink);transform:rotate(.6deg)} .tcard:nth-child(3n+3){background:var(--lime);transform:rotate(-.6deg)}
+.tc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.tcard h3{font-family:var(--display);font-weight:900;font-size:25px;line-height:1.1;overflow-wrap:anywhere}
+.tcard .pl{font-size:14.5px;font-weight:600;color:var(--ink2);margin-top:4px}
+.tcard .slog{font-family:var(--marker);font-size:19px;line-height:1.25;color:var(--court-d);margin-top:10px;overflow-wrap:anywhere}
+.tcard .slog.none{opacity:.55;font-size:16px}
+.tcard .btn.sm{flex:0 0 auto;padding:5px 12px;font-size:13px}
+.jar-link{display:flex;justify-content:space-between;align-items:center;gap:12px;text-decoration:none;color:inherit;margin-top:12px}
+.jar-link b{font-family:var(--display);font-weight:900;font-size:24px;display:block}
 /* what to bring */
 .bring{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
 .item{background:var(--paper);border:2.5px solid var(--ink);border-radius:18px;padding:12px 12px 14px;text-align:center;min-width:0}
@@ -439,6 +451,7 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
 
       <form id="fTeam" onsubmit="return submitReg(event,'team')" novalidate>
         <label for="tName">Team name</label><input id="tName" type="text" maxlength="30" placeholder="e.g. Dink Floyd" autocomplete="off" required>
+        <label for="tSlogan">Team slogan <span class="note">(optional, shown on the Teams page)</span></label><input id="tSlogan" type="text" maxlength="60" placeholder="e.g. We peaked in the kitchen." autocomplete="off">
         <div class="player"><span class="tagp">Player 1</span>
           <label for="tP1">Name</label><input id="tP1" type="text" maxlength="30" autocomplete="name" required>
           <div class="grid2"><div><label for="tPh1">Phone</label><input id="tPh1" type="tel" autocomplete="tel" required></div>
@@ -472,11 +485,19 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
       </form>
     </div>
 
-    <section class="sec">
-      <h2 style="font-size:34px">Who's in the jar</h2>
-      <p class="note" id="whoCount">Loading…</p>
-      <ul class="teams" id="whoList"></ul>
-    </section>
+    <a class="card jar-link" href="#teams" onclick="go('teams');return false">
+      <div><b>Who's in the jar</b><span class="note" id="whoCount">Loading…</span><p class="note" style="margin-top:4px">Already in? Edit your RSVP or add a slogan there.</p></div>
+      <span class="btn sm">See teams →</span>
+    </a>
+  </div>
+</section>
+
+<!-- ================= TEAMS ================= -->
+<section id="p-teams" class="hidden">
+  <div class="wrap">
+    <div class="pagehead"><h1>Who's in the jar</h1><p><span id="teamsCount">Loading…</span> Tap <b>Edit</b> on your team to change your RSVP or add a slogan.</p></div>
+    <div class="tcards" id="teamCards"></div>
+    <div class="callout" style="margin-top:22px"><b>Not in yet?</b> <a href="#rsvp" onclick="go('rsvp');return false">RSVP here</a>. Flying solo counts too.</div>
   </div>
 </section>
 
@@ -592,6 +613,7 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
 <nav class="tabs" aria-label="Pages">
   <button data-p="home" onclick="go('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V10l8-6 8 6v11"/><path d="M9 21v-6h6v6"/></svg>Invite</button>
   <button data-p="rsvp" class="rsvp" onclick="go('rsvp')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>RSVP</button>
+  <button data-p="teams" onclick="go('teams')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.3c3 .2 5.5 2.4 5.5 5.7"/></svg>Teams</button>
   <button data-p="learn" onclick="go('learn')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l9-3 9 3-9 3z"/><path d="M7 8v5c0 2 10 2 10 0V8"/></svg>Learn</button>
   <button data-p="game" onclick="go('game')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="10" r="1.2" fill="currentColor"/><circle cx="11" cy="15" r="1.2" fill="currentColor"/></svg>Game day</button>
 </nav>
@@ -603,7 +625,7 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
 var API_URL = 'https://script.google.com/macros/s/AKfycbwzzp8XdOLTookWgd-wzIHhtxOzr9ulpAiK6dJLL692JTKPEQ3sMZkoahTueu7i_Pd5/exec';
 var END_TIME = Date.parse('2026-10-18T03:00:00Z');   // 8:00 PM PT
 var START_TIME = Date.parse('2026-10-18T01:00:00Z'); // 6:00 PM PT
-var PAGES = ['home', 'rsvp', 'learn', 'game', 'admin'];
+var PAGES = ['home', 'rsvp', 'teams', 'learn', 'game', 'admin'];
 var S = { page: 'home', view: null, team: null, kind: 'team', admin: null, code: null, peek: false, timer: null, skew: 0 };
 var BALL = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="#E3F25B" stroke="#173322" stroke-width="3.5"/><g fill="#173322" opacity=".85"><circle cx="22" cy="20" r="3.4"/><circle cx="36" cy="16" r="3"/><circle cx="46" cy="27" r="3.4"/><circle cx="30" cy="31" r="3.6"/><circle cx="18" cy="35" r="3"/><circle cx="42" cy="42" r="3.4"/><circle cx="27" cy="46" r="3.2"/></g></svg>';
 
@@ -668,8 +690,9 @@ function render(prev) {
   $('deadlineCount').textContent = cd; $('deadlineCount2').textContent = cd;
   $('regClosed').classList.toggle('hidden', v.meta.regOpen);
   $('regForm').classList.toggle('hidden', !v.meta.regOpen);
-  $('whoCount').textContent = v.teams.length + (v.teams.length === 1 ? ' team' : ' teams') + (v.soloCount ? ' + ' + v.soloCount + ' solo player' + (v.soloCount > 1 ? 's' : '') + ' looking for a partner' : '') + ' so far.';
-  $('whoList').innerHTML = v.teams.map(function (t) { return '<li><div><b>' + esc(t.name) + '</b><span>' + esc(t.p1) + ' &amp; ' + esc(t.p2) + '</span></div></li>'; }).join('');
+  var cnt = v.teams.length + (v.teams.length === 1 ? ' team' : ' teams') + (v.soloCount ? ' + ' + v.soloCount + ' solo player' + (v.soloCount > 1 ? 's' : '') + ' looking for a partner' : '') + ' so far.';
+  $('whoCount').textContent = cnt; $('teamsCount').textContent = cnt;
+  renderTeams();
   renderGame(prev);
   renderSmack(v.comments);
   if (v.meta.revealed && v.standings && !S.revealSeen && store('bdi_reveal_seen') !== String(v.meta.startedAt) && (S.page === 'game' || S.page === 'home')) {
@@ -820,7 +843,7 @@ function submitReg(ev, kind) {
   var problem = checkForm(form); if (problem) { err.textContent = problem; return false; }
   btn.disabled = true;
   var d = kind === 'team'
-    ? { name: $('tName').value, p1: $('tP1').value, phone1: $('tPh1').value, email1: $('tEm1').value, p2: $('tP2').value, phone2: $('tPh2').value, email2: $('tEm2').value, paddles: radio('tPad'), note: $('tNote').value }
+    ? { name: $('tName').value, slogan: $('tSlogan').value, p1: $('tP1').value, phone1: $('tPh1').value, email1: $('tEm1').value, p2: $('tP2').value, phone2: $('tPh2').value, email2: $('tEm2').value, paddles: radio('tPad'), note: $('tNote').value }
     : { kind: 'solo', name: $('sName').value, phone: $('sPh').value, email: $('sEm').value, skill: $('sSkill').value, paddles: radio('sPad'), note: $('sNote').value };
   call('register', d).then(function (r) {
     btn.disabled = false; form.reset(); confetti(80);
@@ -828,6 +851,7 @@ function submitReg(ev, kind) {
       S.team = r.team.id; store('bdi_team', r.team.id);
       modal('<div style="text-align:center"><div class="ballspin">' + BALL + '</div><h2 style="font-size:30px">You\'re in, ' + esc(r.team.name) + '!</h2><p style="margin-top:6px">' + esc(r.team.p1) + ' &amp; ' + esc(r.team.p2) + '</p>' +
         '<p class="note" style="margin-top:10px">See you Saturday. Be checked in by <b>5:40 PM</b>. On game day, open this site and tap <b>Game day</b>.</p>' +
+        '<p class="note" style="margin-top:6px">Need to change something? Tap <b>Edit</b> on your team in <b>Teams</b>.</p>' +
         '<button class="btn block" style="margin-top:16px" onclick="closeModal()">Done</button></div>');
     } else {
       modal('<div style="text-align:center"><div class="ballspin">' + BALL + '</div><h2 style="font-size:30px">Got you, ' + esc(r.name) + '!</h2><p style="margin-top:6px">We\'ll pair you with a partner and tell you your team before Saturday.</p>' +
@@ -836,6 +860,50 @@ function submitReg(ev, kind) {
     refresh();
   }).catch(function (e) { btn.disabled = false; err.textContent = cleanErr(e); });
   return false;
+}
+
+/* ============================== teams + self-edit ============================== */
+function renderTeams() {
+  var v = S.view; if (!v) return;
+  $('teamCards').innerHTML = v.teams.length ? v.teams.map(function (t) {
+    return '<div class="tcard"><div class="tc-top"><h3>' + esc(t.name) + '</h3><button class="btn ghost sm" onclick="editMine(\'' + t.id + '\')">Edit</button></div>' +
+      '<p class="pl">' + esc(t.p1) + ' &amp; ' + esc(t.p2) + '</p>' +
+      (t.slogan ? '<p class="slog">“' + esc(t.slogan) + '”</p>' : '<p class="slog none">No slogan yet. Suspicious.</p>') + '</div>';
+  }).join('') : '<p class="note">Nobody yet. Be the first in the jar.</p>';
+}
+function editMine(id) {
+  var t = S.view.teams.filter(function (x) { return x.id === id; })[0]; if (!t) return;
+  modal('<h2 style="font-size:28px">Edit ' + esc(t.name) + '</h2><p class="note" style="margin-top:6px">Prove it\'s you: enter the phone number or email either player used to RSVP.</p>' +
+    '<label for="uWho">Phone or email</label><input id="uWho" type="text" autocomplete="email" onkeydown="if(event.key===\'Enter\')unlockMine(\'' + id + '\')">' +
+    '<div class="err" id="eWho"></div><div class="row" style="margin-top:14px"><button class="btn ghost" style="flex:1" onclick="closeModal()">Cancel</button><button class="btn" style="flex:1" id="uGo" onclick="unlockMine(\'' + id + '\')">Unlock</button></div>');
+  setTimeout(function () { var i = $('uWho'); if (i) i.focus(); }, 50);
+}
+function unlockMine(id) {
+  var who = $('uWho').value.trim(); $('eWho').textContent = '';
+  if (!who) { $('eWho').textContent = 'Enter a phone number or email.'; return; }
+  $('uGo').disabled = true;
+  call('teamEdit', id, who).then(function (t) { S.editWho = who; editForm(t); })
+    .catch(function (e) { $('uGo').disabled = false; $('eWho').textContent = cleanErr(e); });
+}
+function editForm(t) {
+  var c0 = t.c[0] || {}, c1 = t.c[1] || {};
+  var f = function (id, lab, val, type, max) { return '<label for="' + id + '">' + lab + '</label><input id="' + id + '" type="' + (type || 'text') + '" maxlength="' + (max || 80) + '" value="' + esc(val || '') + '">'; };
+  var pad = [['0', "We're set"], ['1', 'Need 1'], ['2', 'Need 2']].map(function (o) { return '<label><input type="radio" name="uPad" value="' + o[0] + '"' + (String(t.paddles) === o[0] ? ' checked' : '') + '><span>' + o[1] + '</span></label>'; }).join('');
+  modal('<h2 style="font-size:28px">Edit your RSVP</h2>' + f('uN', 'Team name', t.name, 'text', 30) + f('uS', 'Team slogan', t.slogan, 'text', 60) +
+    '<div class="player"><span class="tagp">Player 1</span>' + f('uP1', 'Name', t.p1, 'text', 30) + '<div class="grid2"><div>' + f('uPh1', 'Phone', c0.phone, 'tel') + '</div><div>' + f('uEm1', 'Email', c0.email, 'email') + '</div></div></div>' +
+    '<div class="player"><span class="tagp">Player 2</span>' + f('uP2', 'Name', t.p2, 'text', 30) + '<div class="grid2"><div>' + f('uPh2', 'Phone', c1.phone, 'tel') + '</div><div>' + f('uEm2', 'Email', c1.email, 'email') + '</div></div></div>' +
+    '<label>Paddles</label><div class="seg">' + pad + '</div>' +
+    '<label for="uNote">Note for Isa &amp; Avi</label><textarea id="uNote" maxlength="200">' + esc(t.note) + '</textarea>' +
+    '<div class="err" id="eEdit"></div><div class="row" style="margin-top:14px"><button class="btn ghost" style="flex:1" onclick="closeModal()">Cancel</button><button class="btn" style="flex:1" id="uSave" onclick="saveMine(\'' + t.id + '\')">Save</button></div>');
+  $('uS').placeholder = 'e.g. We peaked in the kitchen.';
+}
+function saveMine(id) {
+  var d = { name: $('uN').value, slogan: $('uS').value, p1: $('uP1').value, phone1: $('uPh1').value, email1: $('uEm1').value,
+            p2: $('uP2').value, phone2: $('uPh2').value, email2: $('uEm2').value, paddles: radio('uPad'), note: $('uNote').value };
+  $('eEdit').textContent = ''; $('uSave').disabled = true;
+  call('teamSave', id, S.editWho, d).then(function (t) {
+    closeModal(); S.editWho = null; toast('Saved. Looking sharp, ' + t.name + '.'); refresh();
+  }).catch(function (e) { $('uSave').disabled = false; $('eEdit').textContent = cleanErr(e); });
 }
 
 /* ============================== smack talk ============================== */
@@ -1059,6 +1127,7 @@ function adminScore(id, p) { act('setScore', { id: id, sa: $(p + 'a_' + id).valu
 function editTeam(id) {
   var t = S.admin.teams.filter(function (x) { return x.id === id; })[0], c = t.c || [], c0 = c[0] || {}, c1 = c[1] || {};
   modal('<h2 style="font-size:28px">Edit team</h2><label>Team name</label><input type="text" id="eN" value="' + esc(t.name) + '">' +
+    '<label>Slogan</label><input type="text" id="eSl" maxlength="60" value="' + esc(t.slogan || '') + '">' +
     '<label>Player 1</label><input type="text" id="eP1" value="' + esc(t.p1) + '"><div class="grid2"><div><label>Phone</label><input type="tel" id="ePh1" value="' + esc(c0.phone || '') + '"></div><div><label>Email</label><input type="email" id="eEm1" value="' + esc(c0.email || '') + '"></div></div>' +
     '<label>Player 2</label><input type="text" id="eP2" value="' + esc(t.p2) + '"><div class="grid2"><div><label>Phone</label><input type="tel" id="ePh2" value="' + esc(c1.phone || '') + '"></div><div><label>Email</label><input type="email" id="eEm2" value="' + esc(c1.email || '') + '"></div></div>' +
     '<label>Paddles needed</label><select id="ePad"><option value="0"' + (t.paddles == 0 ? ' selected' : '') + '>0</option><option value="1"' + (t.paddles == 1 ? ' selected' : '') + '>1</option><option value="2"' + (t.paddles == 2 ? ' selected' : '') + '>2</option></select>' +
@@ -1066,7 +1135,7 @@ function editTeam(id) {
     '<button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveTeam(\'' + id + '\')">Save</button></div>');
 }
 function saveTeam(id) {
-  act('editTeam', { id: id, name: $('eN').value, p1: $('eP1').value, p2: $('eP2').value, phone1: $('ePh1').value, email1: $('eEm1').value, phone2: $('ePh2').value, email2: $('eEm2').value, paddles: $('ePad').value });
+  act('editTeam', { id: id, name: $('eN').value, p1: $('eP1').value, p2: $('eP2').value, phone1: $('ePh1').value, email1: $('eEm1').value, phone2: $('ePh2').value, email2: $('eEm2').value, paddles: $('ePad').value, slogan: $('eSl').value });
   closeModal();
 }
 function copyText(txt, label) {
