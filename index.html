@@ -311,6 +311,19 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
 .tablewrap{overflow-x:auto}
 .toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--white);padding:12px 18px;border-radius:999px;font-weight:700;z-index:80;max-width:92vw;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 @media (max-width:440px){ .deets{grid-template-columns:1fr} .grid2{grid-template-columns:1fr} .vid{grid-template-columns:120px 1fr} .courtwrap{grid-template-columns:1fr} .courtwrap svg{max-width:230px;margin:0 auto} .court-big .num{font-size:70px} .teaser{grid-template-columns:96px 1fr} .teaser img{width:96px;height:124px} }
+/* desktop: nav on top so it never covers the RSVP button; stickers flank the title */
+@media (min-width:900px){
+  nav.tabs{top:0;bottom:auto;padding:8px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  body{padding-top:72px;padding-bottom:28px}
+  #p-home .home-grid > .smack{top:88px}
+  .toast{bottom:28px}
+}
+@media (min-width:1000px){
+  .hero-row{position:absolute;left:50%;top:118px;width:980px;margin:0 0 0 -490px;justify-content:space-between;pointer-events:none}
+  .burst{width:200px} .badge{width:150px;margin-right:24px}
+  .hero:after{top:330px} .ball-roll{top:300px}
+  .cta{margin-top:26px}
+}
 @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
 </style>
 </head>
