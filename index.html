@@ -395,7 +395,7 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
         <div class="item"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 10c2-4 18-4 20 0l12 10 4 22-8 2-2-14v28H16V30l-2 14-8-2 4-22z" fill="#F7BDD2" stroke="#173322" stroke-width="3" stroke-linejoin="round"/><path d="M24 12c2 8 14 8 16 0" fill="none" stroke="#173322" stroke-width="3"/><path d="M26 40h12" stroke="#173322" stroke-width="3" stroke-linecap="round"/></svg><b>A layer</b><span>October nights. Don't be a cold cucumber.</span></div>
         <div class="item"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="22" y="4" width="20" height="9" rx="3" fill="#173322"/><path d="M20 16h24l2 6v34c0 3-2 5-5 5H23c-3 0-5-2-5-5V22z" fill="#E3F25B" stroke="#173322" stroke-width="3" stroke-linejoin="round"/><path d="M18 30h28" stroke="#173322" stroke-width="3"/><circle cx="27" cy="42" r="2.5" fill="#173322"/><path d="M34 42h5M27 50c3 3 7 3 10 0" stroke="#173322" stroke-width="3" stroke-linecap="round" fill="none"/></svg><b>Your “water” bottle</b><span>See the pickle-cy below</span></div>
       </div>
-      <div class="callout"><b>No paddle or balls?</b> No big dill. Tell us when you RSVP and we'll hook you up.</div>
+      <div class="callout"><b>No paddle or balls?</b> No big dill. Let us know when you RSVP and we'll do our best to round one up (no promises). <b>Got spares?</b> Tell us that too.</div>
       <figure class="polaroid"><img src="https://partiful.imgix.net/external/user/xKdp9kHFMxVZspvpet8hrsXzMhr2/u_e_oKbTQzmOB5tD1abbx?rect=510,680,514,400&amp;w=840&amp;auto=format&amp;q=80" alt="Two pickleball paddles and balls on a green court" loading="lazy"><p>good friends, good rallies</p></figure>
     </section>
 
@@ -475,10 +475,12 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
           <div class="grid2"><div><label for="tPh2">Phone</label><input id="tPh2" type="tel" autocomplete="off" required></div>
           <div><label for="tEm2">Email</label><input id="tEm2" type="email" autocomplete="off" required></div></div>
         </div>
-        <label>Paddles</label>
+        <label>Need paddles?</label>
         <div class="seg"><label><input type="radio" name="tPad" value="0" checked><span>We're set</span></label><label><input type="radio" name="tPad" value="1"><span>Need 1</span></label><label><input type="radio" name="tPad" value="2"><span>Need 2</span></label></div>
+        <p class="note" style="margin-top:6px">No promises, but tell us and we'll do our best to round one up for you.</p>
         <label>Got extra paddles to lend?</label>
         <div class="seg"><label><input type="radio" name="tLendYN" value="0" checked onchange="lendYN('t')"><span>Nope</span></label><label><input type="radio" name="tLendYN" value="1" onchange="lendYN('t')"><span>Yes, we can lend</span></label></div>
+        <p class="note" style="margin-top:6px">Spares help us cover players who don't have one.</p>
         <div id="tLendWrap" class="hidden"><label for="tLend">How many can you lend?</label><select id="tLend"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6+</option></select></div>
         <label for="tNote">Note for Isa &amp; Avi <span class="note">(optional)</span></label><textarea id="tNote" maxlength="200" placeholder="Need balls too? Running late? Tell us here."></textarea>
         <div class="err" id="eTeam"></div>
@@ -494,8 +496,10 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
         <select id="sSkill"><option value="">Pick one</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
         <label>Need a paddle?</label>
         <div class="seg"><label><input type="radio" name="sPad" value="0" checked><span>I have one</span></label><label><input type="radio" name="sPad" value="1"><span>Yes please</span></label></div>
+        <p class="note" style="margin-top:6px">No promises, but tell us and we'll do our best to round one up for you.</p>
         <label>Got extra paddles to lend?</label>
         <div class="seg"><label><input type="radio" name="sLendYN" value="0" checked onchange="lendYN('s')"><span>Nope</span></label><label><input type="radio" name="sLendYN" value="1" onchange="lendYN('s')"><span>Yes, I can lend</span></label></div>
+        <p class="note" style="margin-top:6px">Spares help us cover players who don't have one.</p>
         <div id="sLendWrap" class="hidden"><label for="sLend">How many can you lend?</label><select id="sLend"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6+</option></select></div>
         <label for="sNote">Note for Isa &amp; Avi <span class="note">(optional)</span></label><textarea id="sNote" maxlength="200" placeholder="Lefty? Love to lob? Need balls?"></textarea>
         <div class="err" id="eSolo"></div>
