@@ -477,6 +477,9 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
         </div>
         <label>Paddles</label>
         <div class="seg"><label><input type="radio" name="tPad" value="0" checked><span>We're set</span></label><label><input type="radio" name="tPad" value="1"><span>Need 1</span></label><label><input type="radio" name="tPad" value="2"><span>Need 2</span></label></div>
+        <label>Got extra paddles to lend?</label>
+        <div class="seg"><label><input type="radio" name="tLendYN" value="0" checked onchange="lendYN('t')"><span>Nope</span></label><label><input type="radio" name="tLendYN" value="1" onchange="lendYN('t')"><span>Yes, we can lend</span></label></div>
+        <div id="tLendWrap" class="hidden"><label for="tLend">How many can you lend?</label><select id="tLend"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6+</option></select></div>
         <label for="tNote">Note for Isa &amp; Avi <span class="note">(optional)</span></label><textarea id="tNote" maxlength="200" placeholder="Need balls too? Running late? Tell us here."></textarea>
         <div class="err" id="eTeam"></div>
         <button class="btn block" style="margin-top:16px;font-size:19px;padding:15px" type="submit">Dill us in</button>
@@ -491,6 +494,9 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
         <select id="sSkill"><option value="">Pick one</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
         <label>Need a paddle?</label>
         <div class="seg"><label><input type="radio" name="sPad" value="0" checked><span>I have one</span></label><label><input type="radio" name="sPad" value="1"><span>Yes please</span></label></div>
+        <label>Got extra paddles to lend?</label>
+        <div class="seg"><label><input type="radio" name="sLendYN" value="0" checked onchange="lendYN('s')"><span>Nope</span></label><label><input type="radio" name="sLendYN" value="1" onchange="lendYN('s')"><span>Yes, I can lend</span></label></div>
+        <div id="sLendWrap" class="hidden"><label for="sLend">How many can you lend?</label><select id="sLend"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6+</option></select></div>
         <label for="sNote">Note for Isa &amp; Avi <span class="note">(optional)</span></label><textarea id="sNote" maxlength="200" placeholder="Lefty? Love to lob? Need balls?"></textarea>
         <div class="err" id="eSolo"></div>
         <button class="btn block" style="margin-top:16px;font-size:19px;padding:15px" type="submit">Find me a pickle partner</button>
@@ -841,6 +847,8 @@ function setKind(k) {
   $('segTeam').classList.toggle('on', k === 'team'); $('segSolo').classList.toggle('on', k === 'solo');
   $('fTeam').classList.toggle('hidden', k !== 'team'); $('fSolo').classList.toggle('hidden', k !== 'solo');
 }
+function lendYN(px) { $(px + 'LendWrap').classList.toggle('hidden', radio(px + 'LendYN') !== 1); }
+function lendVal(px) { return radio(px + 'LendYN') === 1 ? +$(px + 'Lend').value : 0; }
 function radio(name) { var r = document.querySelector('input[name="' + name + '"]:checked'); return r ? +r.value : 0; }
 function checkForm(form) {
   var bad = Array.prototype.filter.call(form.querySelectorAll('input[required]'), function (i) { return !i.value.trim() || !i.checkValidity(); })[0];
@@ -856,10 +864,10 @@ function submitReg(ev, kind) {
   var problem = checkForm(form); if (problem) { err.textContent = problem; return false; }
   btn.disabled = true;
   var d = kind === 'team'
-    ? { name: $('tName').value, slogan: $('tSlogan').value, p1: $('tP1').value, phone1: $('tPh1').value, email1: $('tEm1').value, p2: $('tP2').value, phone2: $('tPh2').value, email2: $('tEm2').value, paddles: radio('tPad'), note: $('tNote').value }
-    : { kind: 'solo', name: $('sName').value, phone: $('sPh').value, email: $('sEm').value, skill: $('sSkill').value, paddles: radio('sPad'), note: $('sNote').value };
+    ? { name: $('tName').value, slogan: $('tSlogan').value, p1: $('tP1').value, phone1: $('tPh1').value, email1: $('tEm1').value, p2: $('tP2').value, phone2: $('tPh2').value, email2: $('tEm2').value, paddles: radio('tPad'), lend: lendVal('t'), note: $('tNote').value }
+    : { kind: 'solo', name: $('sName').value, phone: $('sPh').value, email: $('sEm').value, skill: $('sSkill').value, paddles: radio('sPad'), lend: lendVal('s'), note: $('sNote').value };
   call('register', d).then(function (r) {
-    btn.disabled = false; form.reset(); confetti(80);
+    btn.disabled = false; form.reset(); lendYN('t'); lendYN('s'); confetti(80);
     if (r.kind === 'team') {
       S.team = r.team.id; store('bdi_team', r.team.id);
       modal('<div style="text-align:center"><div class="ballspin">' + BALL + '</div><h2 style="font-size:30px">You\'re in, ' + esc(r.team.name) + '!</h2><p style="margin-top:6px">' + esc(r.team.p1) + ' &amp; ' + esc(r.team.p2) + '</p>' +
@@ -906,13 +914,16 @@ function editForm(t) {
     '<div class="player"><span class="tagp">Player 1</span>' + f('uP1', 'Name', t.p1, 'text', 30) + '<div class="grid2"><div>' + f('uPh1', 'Phone', c0.phone, 'tel') + '</div><div>' + f('uEm1', 'Email', c0.email, 'email') + '</div></div></div>' +
     '<div class="player"><span class="tagp">Player 2</span>' + f('uP2', 'Name', t.p2, 'text', 30) + '<div class="grid2"><div>' + f('uPh2', 'Phone', c1.phone, 'tel') + '</div><div>' + f('uEm2', 'Email', c1.email, 'email') + '</div></div></div>' +
     '<label>Paddles</label><div class="seg">' + pad + '</div>' +
+    '<label>Got extra paddles to lend?</label><div class="seg"><label><input type="radio" name="uLendYN" value="0"' + (t.lend ? '' : ' checked') + ' onchange="lendYN(\'u\')"><span>Nope</span></label><label><input type="radio" name="uLendYN" value="1"' + (t.lend ? ' checked' : '') + ' onchange="lendYN(\'u\')"><span>Yes, we can lend</span></label></div>' +
+    '<div id="uLendWrap"' + (t.lend ? '' : ' class="hidden"') + '><label for="uLend">How many can you lend?</label><select id="uLend"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6+</option></select></div>' +
     '<label for="uNote">Note for Isa &amp; Avi</label><textarea id="uNote" maxlength="200">' + esc(t.note) + '</textarea>' +
     '<div class="err" id="eEdit"></div><div class="row" style="margin-top:14px"><button class="btn ghost" style="flex:1" onclick="closeModal()">Cancel</button><button class="btn" style="flex:1" id="uSave" onclick="saveMine(\'' + t.id + '\')">Save</button></div>');
   $('uS').placeholder = 'e.g. We peaked in the kitchen.';
+  if (t.lend) $('uLend').value = String(Math.min(6, t.lend));
 }
 function saveMine(id) {
   var d = { name: $('uN').value, slogan: $('uS').value, p1: $('uP1').value, phone1: $('uPh1').value, email1: $('uEm1').value,
-            p2: $('uP2').value, phone2: $('uPh2').value, email2: $('uEm2').value, paddles: radio('uPad'), note: $('uNote').value };
+            p2: $('uP2').value, phone2: $('uPh2').value, email2: $('uEm2').value, paddles: radio('uPad'), lend: lendVal('u'), note: $('uNote').value };
   $('eEdit').textContent = ''; $('uSave').disabled = true;
   call('teamSave', id, S.editWho, d).then(function (t) {
     closeModal(); S.editWho = null; toast('Saved. Looking sharp, ' + t.name + '.'); refresh();
@@ -1050,6 +1061,8 @@ function renderAdmin(force) {
   var ppl = people(a);
   var padTeams = a.teams.filter(function (t) { return t.paddles > 0; }), padSolos = a.solos.filter(function (s) { return s.paddles > 0; });
   var padTotal = padTeams.reduce(function (n, t) { return n + t.paddles; }, 0) + padSolos.reduce(function (n, s) { return n + s.paddles; }, 0);
+  var lenders = a.teams.filter(function (t) { return t.lend > 0; }).map(function (t) { return [t.name, t.lend]; }).concat(a.solos.filter(function (s) { return s.lend > 0; }).map(function (s) { return [s.name + ' (solo)', s.lend]; }));
+  var lendTotal = lenders.reduce(function (n, x) { return n + x[1]; }, 0);
   var notes = a.teams.filter(function (t) { return t.note; }).map(function (t) { return [t.name, t.note]; })
     .concat(a.solos.filter(function (s) { return s.note; }).map(function (s) { return [s.name + ' (solo)', s.note]; }));
   var modeBtns = function (key, cur) {
@@ -1073,9 +1086,10 @@ function renderAdmin(force) {
 
   // contacts
   h += '<div class="card"><h2 style="font-size:28px">Guests &amp; messages</h2>' +
-    '<div class="bigstat"><div><b>' + ppl.length + '</b><span>people</span></div><div><b>' + padTotal + '</b><span>paddles needed</span></div><div><b>' + notes.length + '</b><span>notes</span></div></div>' +
+    '<div class="bigstat"><div><b>' + ppl.length + '</b><span>people</span></div><div><b>' + padTotal + '</b><span>paddles needed</span></div><div><b>' + lendTotal + '</b><span>paddles to lend</span></div><div><b>' + notes.length + '</b><span>notes</span></div></div>' +
     '<div class="row"><button class="btn sm" onclick="copyList(\'email\')">Copy all emails</button><button class="btn sm" onclick="copyList(\'phone\')">Copy all phones</button><button class="btn sm ghost" onclick="copyList(\'all\')">Copy full list</button></div>' +
     (padTotal ? '<p style="margin-top:12px"><b>Paddles:</b> ' + padTeams.map(function (t) { return esc(t.name) + ' (' + t.paddles + ')'; }).concat(padSolos.map(function (s) { return esc(s.name) + ' (1)'; })).join(', ') + '</p>' : '') +
+    (lendTotal ? '<p style="margin-top:8px"><b>Can lend:</b> ' + lenders.map(function (x) { return esc(x[0]) + ' (' + x[1] + ')'; }).join(', ') + '</p>' : '') +
     (notes.length ? '<div style="margin-top:12px"><b>Notes</b>' + notes.map(function (n) { return '<p class="note" style="margin-top:4px"><b>' + esc(n[0]) + ':</b> ' + esc(n[1]) + '</p>'; }).join('') + '</div>' : '') + '</div>';
 
   if (m.phase === 'live') {
