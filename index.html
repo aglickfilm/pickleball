@@ -381,7 +381,7 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
           <li><div><b>Teams of two.</b> Flying solo? RSVP anyway and we'll find you a pickle partner.</div></li>
           <li><div><b>Be checked in by 5:40.</b> Warm up. Play starts promptly at 6:00.</div></li>
           <li><div><b>Finish a match, enter your score on this site.</b> It sends you to your next opponent and court.</div></li>
-          <li><div><b>Winners play winners.</b> No rematches, and everyone plays before anyone plays again.</div></li>
+          <li><div><b>Fresh opponents every match.</b> No rematches, and everyone plays before anyone plays again.</div></li>
           <li><div><b>Scores stay sealed tighter than a pickle jar.</b> Nobody sees the standings until the big reveal at 8, when the prizes come out.</div></li>
         </ol>
       </div>
@@ -724,7 +724,7 @@ function renderGame(prev) {
     var m = my.match;
     h = '<div class="court-big"><div class="lbl">YOUR COURT</div><div class="num">' + m.court + '</div>' +
       '<div class="vs"><span class="note">Game ' + m.game + ' · vs</span><b>' + esc(m.opp.name) + '</b><span class="note">' + esc(m.opp.p1) + ' &amp; ' + esc(m.opp.p2) + '</span></div></div>' +
-      '<p class="house-mini">🤐 House rule: say your partner's first name, lose a point.</p>' +
+      '<p class="house-mini">🤐 House rule: say your partner\'s first name, lose a point.</p>' +
       '<div class="card" style="margin-top:16px"><h2 style="font-size:28px">Final score</h2><p class="note">Only one team needs to enter it. Scores stay sealed.</p>' +
       '<div class="stepper">' + side('me', 'You') + side('them', m.opp.name) + '</div>' +
       '<div class="err" id="eScore"></div><button class="btn block" style="margin-top:14px" onclick="confirmScore()">Lock in the score</button></div>';
