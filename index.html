@@ -142,6 +142,14 @@ h1,h2{font-family:var(--display);font-weight:900;line-height:1.02;letter-spacing
 .drinks h2{font-size:clamp(46px,12vw,76px);line-height:.95;margin:8px 0 12px;color:var(--ink)}
 .drinks-sub{font-size:27px;line-height:1.15;font-weight:800;color:var(--ink)}
 .drinks .marker{font-size:23px;color:var(--court-d);margin-top:8px;display:block}
+/* house rule */
+.house{background:var(--lime);transform:rotate(.8deg);box-shadow:6px 6px 0 var(--pink-d);text-align:center;padding:24px 18px}
+.house svg{width:78px;height:78px;display:block;margin:0 auto 6px}
+.house .eyebrow{color:var(--ink)}
+.house h2{font-size:clamp(34px,9vw,52px);line-height:1;margin:6px 0 10px;color:var(--ink)}
+.house p{font-size:17px;color:var(--ink)}
+.house .marker{display:block;font-size:20px;color:var(--court-d);margin-top:10px}
+.house-mini{background:var(--lime);border:2.5px solid var(--ink);border-radius:999px;padding:8px 14px;margin-top:14px;text-align:center;font-weight:800;font-size:15px;color:var(--ink)}
 /* what to bring */
 .bring{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
 .item{background:var(--paper);border:2.5px solid var(--ink);border-radius:18px;padding:12px 12px 14px;text-align:center;min-width:0}
@@ -376,6 +384,16 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
           <li><div><b>Winners play winners.</b> No rematches, and everyone plays before anyone plays again.</div></li>
           <li><div><b>Scores stay sealed tighter than a pickle jar.</b> Nobody sees the standings until the big reveal at 8, when the prizes come out.</div></li>
         </ol>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="card house">
+        <svg viewBox="0 0 80 80" aria-hidden="true"><g stroke="#173322" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"><path d="M12 14h56a6 6 0 0 1 6 6v30a6 6 0 0 1-6 6H34l-14 12V56h-8a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6z" fill="#FFFCF4"/><path d="M26 28l28 14M54 28L26 42" stroke="#EB8FB2" stroke-width="6"/></g></svg>
+        <div class="eyebrow">House rule</div>
+        <h2>Say a first name, lose a point.</h2>
+        <p>Anyone's first name, on court, mid-game. Your partner's, your opponent's, yours, Isa's, Avi's. If the other team hears it, they get the point.</p>
+        <span class="marker">Good luck yelling "____, yours!"</span>
       </div>
     </section>
 
@@ -706,6 +724,7 @@ function renderGame(prev) {
     var m = my.match;
     h = '<div class="court-big"><div class="lbl">YOUR COURT</div><div class="num">' + m.court + '</div>' +
       '<div class="vs"><span class="note">Game ' + m.game + ' · vs</span><b>' + esc(m.opp.name) + '</b><span class="note">' + esc(m.opp.p1) + ' &amp; ' + esc(m.opp.p2) + '</span></div></div>' +
+      '<p class="house-mini">🤐 House rule: say a first name, lose a point.</p>' +
       '<div class="card" style="margin-top:16px"><h2 style="font-size:28px">Final score</h2><p class="note">Only one team needs to enter it. Scores stay sealed.</p>' +
       '<div class="stepper">' + side('me', 'You') + side('them', m.opp.name) + '</div>' +
       '<div class="err" id="eScore"></div><button class="btn block" style="margin-top:14px" onclick="confirmScore()">Lock in the score</button></div>';
