@@ -103,10 +103,38 @@ h1,h2{font-family:var(--display);font-weight:900;line-height:1.02;letter-spacing
 .prize svg{width:56px;height:56px;margin:0 auto 4px;display:block}
 .prize b{display:block;font-family:var(--display);font-weight:900;font-size:19px;line-height:1.1}
 .prize span{display:block;font-size:13px;color:var(--ink2);margin-top:2px}
-.prize.first{background:var(--lime);transform:translateY(-10px) rotate(-1.5deg)}
+.prize.first{background:var(--lime);transform:rotate(-1.5deg)}
 .prize.mid{background:var(--pink);transform:rotate(1.5deg)}
 .prize.last{background:var(--court);color:var(--white);transform:rotate(-1deg)} .prize.last span{color:#D7E8DC}
 .prize-note{text-align:center;font-family:var(--marker);font-size:20px;color:var(--court);margin-top:14px;transform:rotate(-1.5deg)}
+/* smack talk */
+.smack{background:var(--court-d);color:var(--white);border-radius:24px;padding:18px 16px 16px;margin-top:30px;box-shadow:0 12px 26px rgba(23,51,34,.28);position:relative}
+.smack-head{display:flex;align-items:center;gap:10px}
+.smack-head svg{width:40px;height:40px;flex:0 0 40px}
+.smack h2{font-size:34px;color:var(--lime);margin:0}
+.smack-sub{font-family:var(--marker);color:var(--pink);font-size:17px;margin:4px 0 12px;transform:rotate(-1.5deg)}
+.smack input[type=text],.smack textarea{border-color:var(--court-d);background:var(--cream);color:var(--ink);font-size:16px;padding:10px 12px}
+.smack textarea{min-height:70px;margin-top:8px}
+.smack-row{justify-content:space-between;margin-top:8px}
+.smack-row .note{color:#BFD6C6}
+.smack .err{color:var(--pink)}
+.feed{display:grid;gap:10px;margin-top:14px;max-height:520px;overflow:auto;padding-right:2px;overscroll-behavior:contain}
+.bubble{background:var(--cream);color:var(--ink);border-radius:16px 16px 16px 4px;padding:10px 12px 8px;min-width:0}
+.bubble:nth-child(3n+2){background:var(--pink)} .bubble:nth-child(3n+3){background:var(--lime)}
+.bh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.bh b{font-size:14.5px}
+.bh .tm{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--court)}
+.bh .when{font-size:12px;color:var(--ink2);margin-left:auto}
+.bubble p{font-size:15.5px;line-height:1.38;margin-top:2px;overflow-wrap:anywhere}
+.fire{border:0;background:rgba(23,51,34,.08);font-weight:800;cursor:pointer;font-size:13px;padding:2px 9px;border-radius:999px;margin-top:6px}
+.fire.on{background:var(--ink);color:var(--white)}
+.feed .empty{color:#BFD6C6;text-align:center;padding:14px 0;font-family:var(--marker);font-size:18px}
+@media (min-width:1000px){
+  #p-home .home-grid{max-width:1140px;display:grid;grid-template-columns:minmax(0,1fr) 360px;column-gap:40px;align-items:start}
+  #p-home .home-grid > *{grid-column:1}
+  #p-home .home-grid > .smack{grid-column:2;grid-row:1 / span 12;position:sticky;top:16px}
+  .feed{max-height:calc(100vh - 380px)}
+}
 /* what to bring */
 .bring{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
 .item{background:var(--paper);border:2.5px solid var(--ink);border-radius:18px;padding:12px 12px 14px;text-align:center;min-width:0}
@@ -277,7 +305,7 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
       </div>
     </div>
     <div class="cta wrap">
-    <span class="note-hand">Start here</span>
+    <span class="note-hand">Don't dill-y dally</span>
     <svg class="arrow" viewBox="0 0 90 76" aria-hidden="true"><path d="M30 4c-14 14-12 34 6 44 8 5 16 8 14 18" fill="none" stroke="#E3F25B" stroke-width="4" stroke-linecap="round"/><path d="M38 56l12 14 10-16" fill="none" stroke="#E3F25B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <a class="mega" href="#rsvp" onclick="go('rsvp');return false"><span class="big">RSVP</span><span class="sub">&amp; register your team →</span></a>
     <p class="deadline"><b>Deadline: Thursday, Oct 15 at midnight.</b> <span id="deadlineCount"></span></p>
@@ -286,55 +314,67 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
   </header>
 
 
-  <div class="wrap">
+  <div class="wrap home-grid">
     <section class="sec">
-      <h2>The deets</h2>
+      <h2>Here's the dill</h2>
       <div class="deets">
-        <div class="deet lime"><div class="eyebrow">When</div><b>Saturday, Oct 17</b><p>Play runs 6:00–8:00 PM</p></div>
+        <div class="deet lime"><div class="eyebrow">When</div><b>Saturday, Oct 17</b><p>Play runs 6:00–8:00 PM. Our court reservation ends at 8 sharp, so please be on time.</p></div>
         <div class="deet pink"><div class="eyebrow">Check in by</div><b>5:40 PM</b><p>On site and checked in. Warm up, then get your first matchup. Play starts promptly at 6:00.</p></div>
         <div class="deet court"><div class="eyebrow">Where</div><b>La Cienega Tennis Center · Courts 12A–D</b><p>325 S La Cienega Blvd, Beverly Hills, CA 90211</p><p style="margin-top:6px"><a href="https://maps.google.com/?q=La+Cienega+Tennis+Center,+325+S+La+Cienega+Blvd,+Beverly+Hills,+CA+90211" target="_blank" rel="noopener">Open in Maps →</a></p></div>
       </div>
     </section>
 
     <section class="sec">
-      <h2>Play for prizes</h2>
+      <h2>Big dill prizes</h2>
       <div class="prizes">
-        <div class="prize mid"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 4h20l-4 18H26z" fill="#2F5E40"/><circle cx="32" cy="40" r="18" fill="#FFFCF4" stroke="#173322" stroke-width="3"/><circle cx="32" cy="40" r="11" fill="none" stroke="#173322" stroke-width="2" stroke-dasharray="3 3"/><text x="32" y="45" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-weight="900" font-size="14" fill="#173322">2+</text></svg><b>Other places</b><span>A few spots in between</span></div>
-        <div class="prize first"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 8h28v14c0 8-6 14-14 14S18 30 18 22z" fill="#FFFCF4" stroke="#173322" stroke-width="3"/><path d="M18 12H8c0 8 4 12 10 12M46 12h10c0 8-4 12-10 12" fill="none" stroke="#173322" stroke-width="3"/><path d="M28 36h8v10h-8z" fill="#173322"/><rect x="20" y="46" width="24" height="10" rx="3" fill="#173322"/><text x="32" y="26" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-weight="900" font-size="13" fill="#173322">1</text></svg><b>1st place</b><span>Bragging rights and then some</span></div>
-        <div class="prize last"><svg viewBox="0 0 64 64" aria-hidden="true"><g transform="rotate(-30 32 32)"><rect x="20" y="8" width="24" height="48" rx="12" fill="#C8D93E" stroke="#173322" stroke-width="3"/><g fill="#173322" opacity=".55"><circle cx="28" cy="18" r="2"/><circle cx="36" cy="26" r="2"/><circle cx="28" cy="34" r="2"/><circle cx="36" cy="44" r="2"/></g></g></svg><b>Last place</b><span>Yes, really</span></div>
+        <div class="prize first"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 8h28v14c0 8-6 14-14 14S18 30 18 22z" fill="#FFFCF4" stroke="#173322" stroke-width="3"/><path d="M18 12H8c0 8 4 12 10 12M46 12h10c0 8-4 12-10 12" fill="none" stroke="#173322" stroke-width="3"/><path d="M28 36h8v10h-8z" fill="#173322"/><rect x="20" y="46" width="24" height="10" rx="3" fill="#173322"/><text x="32" y="26" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-weight="900" font-size="13" fill="#173322">1</text></svg><b>1st place</b><span>The big dill</span></div>
+        <div class="prize last"><svg viewBox="0 0 64 64" aria-hidden="true"><g transform="rotate(-30 32 32)"><rect x="20" y="8" width="24" height="48" rx="12" fill="#C8D93E" stroke="#173322" stroke-width="3"/><g fill="#173322" opacity=".55"><circle cx="28" cy="18" r="2"/><circle cx="36" cy="26" r="2"/><circle cx="28" cy="34" r="2"/><circle cx="36" cy="44" r="2"/></g></g></svg><b>Last place</b><span>Yes, really. Sweet relish.</span></div>
+        <div class="prize mid"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 4h20l-4 18H26z" fill="#2F5E40"/><circle cx="32" cy="40" r="18" fill="#FFFCF4" stroke="#173322" stroke-width="3"/><circle cx="32" cy="40" r="11" fill="none" stroke="#173322" stroke-width="2" stroke-dasharray="3 3"/><text x="32" y="45" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-weight="900" font-size="14" fill="#173322">2+</text></svg><b>Other places</b><span>A few more spots in the jar</span></div>
       </div>
-      <p class="prize-note">Prizes get handed out at the 8 PM reveal.</p>
+      <p class="prize-note">Spoils get dished out at the 8 PM reveal.</p>
     </section>
 
+    <aside class="smack" id="smack" aria-label="Smack talk">
+      <div class="smack-head"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="17" y="4" width="14" height="24" rx="7" fill="#E3F25B" stroke="#173322" stroke-width="2.5"/><path d="M11 22c0 8 6 13 13 13s13-5 13-13" fill="none" stroke="#F7BDD2" stroke-width="3.5" stroke-linecap="round"/><path d="M24 35v8M16 44h16" stroke="#F7BDD2" stroke-width="3.5" stroke-linecap="round"/></svg><h2>Smack talk</h2></div>
+      <p class="smack-sub">Dish it out. Name names. Show no mercy.</p>
+      <form id="fSmack" onsubmit="return postSmack(event)" novalidate>
+        <input id="smName" type="text" maxlength="30" placeholder="Your name" autocomplete="name" aria-label="Your name">
+        <textarea id="smText" maxlength="200" placeholder="Who's in a pickle?" aria-label="Your message"></textarea>
+        <div class="row smack-row"><span class="note" id="smCount">200 left</span><button class="btn sm" type="submit">Post it</button></div>
+        <div class="err" id="eSmack"></div>
+      </form>
+      <div class="feed" id="smFeed"><p class="empty">Loading the trash talk…</p></div>
+    </aside>
+
     <section class="sec">
-      <h2>What to bring</h2>
+      <h2>What to brine along</h2>
       <div class="bring">
         <div class="item"><svg viewBox="0 0 64 64" aria-hidden="true"><g transform="rotate(-30 32 32)"><rect x="18" y="4" width="28" height="36" rx="12" fill="#F7BDD2" stroke="#173322" stroke-width="3"/><path d="M22 14h20M22 22h20M22 30h20" stroke="#173322" stroke-width="2" opacity=".35"/><rect x="28" y="38" width="8" height="22" rx="3" fill="#173322"/></g></svg><b>Your paddle</b><span>Got a spare? Bring it.</span></div>
         <div class="item"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="24" cy="38" r="17" fill="#E3F25B" stroke="#173322" stroke-width="3"/><circle cx="44" cy="24" r="14" fill="#E3F25B" stroke="#173322" stroke-width="3"/><g fill="#173322" opacity=".75"><circle cx="18" cy="32" r="2.6"/><circle cx="28" cy="30" r="2.6"/><circle cx="22" cy="42" r="2.6"/><circle cx="32" cy="42" r="2.4"/><circle cx="40" cy="19" r="2.3"/><circle cx="49" cy="22" r="2.3"/><circle cx="44" cy="30" r="2.3"/></g></svg><b>Pickleballs</b><span>Outdoor balls, if you have them</span></div>
         <div class="item"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 42c0-8 4-18 8-22l10 4c4 2 8 2 12 0l4 6c6 2 14 4 18 8 2 2 2 6 0 8H8c-1 0-2-2-2-4z" fill="#FFFCF4" stroke="#173322" stroke-width="3" stroke-linejoin="round"/><path d="M6 46h52v6H8c-1 0-2-1-2-2z" fill="#E3F25B" stroke="#173322" stroke-width="3" stroke-linejoin="round"/><path d="M22 28l4 4M28 30l4 4" stroke="#173322" stroke-width="2.5" stroke-linecap="round"/></svg><b>Court shoes</b><span>Sneakers work</span></div>
-        <div class="item"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 10c2-4 18-4 20 0l12 10 4 22-8 2-2-14v28H16V30l-2 14-8-2 4-22z" fill="#F7BDD2" stroke="#173322" stroke-width="3" stroke-linejoin="round"/><path d="M24 12c2 8 14 8 16 0" fill="none" stroke="#173322" stroke-width="3"/><path d="M26 40h12" stroke="#173322" stroke-width="3" stroke-linecap="round"/></svg><b>A layer</b><span>It's an October evening</span></div>
-        <div class="item"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="22" y="4" width="20" height="9" rx="3" fill="#173322"/><path d="M20 16h24l2 6v34c0 3-2 5-5 5H23c-3 0-5-2-5-5V22z" fill="#E3F25B" stroke="#173322" stroke-width="3" stroke-linejoin="round"/><path d="M18 30h28" stroke="#173322" stroke-width="3"/><circle cx="27" cy="42" r="2.5" fill="#173322"/><path d="M34 42h5M27 50c3 3 7 3 10 0" stroke="#173322" stroke-width="3" stroke-linecap="round" fill="none"/></svg><b>Your “water” bottle</b><span>See policy below</span></div>
+        <div class="item"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 10c2-4 18-4 20 0l12 10 4 22-8 2-2-14v28H16V30l-2 14-8-2 4-22z" fill="#F7BDD2" stroke="#173322" stroke-width="3" stroke-linejoin="round"/><path d="M24 12c2 8 14 8 16 0" fill="none" stroke="#173322" stroke-width="3"/><path d="M26 40h12" stroke="#173322" stroke-width="3" stroke-linecap="round"/></svg><b>A layer</b><span>October nights. Don't be a cold cucumber.</span></div>
+        <div class="item"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="22" y="4" width="20" height="9" rx="3" fill="#173322"/><path d="M20 16h24l2 6v34c0 3-2 5-5 5H23c-3 0-5-2-5-5V22z" fill="#E3F25B" stroke="#173322" stroke-width="3" stroke-linejoin="round"/><path d="M18 30h28" stroke="#173322" stroke-width="3"/><circle cx="27" cy="42" r="2.5" fill="#173322"/><path d="M34 42h5M27 50c3 3 7 3 10 0" stroke="#173322" stroke-width="3" stroke-linecap="round" fill="none"/></svg><b>Your “water” bottle</b><span>See the pickle-cy below</span></div>
       </div>
-      <div class="callout"><b>No paddle or balls?</b> No problem. Tell us when you RSVP and we'll have some for you.</div>
+      <div class="callout"><b>No paddle or balls?</b> No big dill. Tell us when you RSVP and we'll hook you up.</div>
       <figure class="polaroid"><img src="https://partiful.imgix.net/external/user/xKdp9kHFMxVZspvpet8hrsXzMhr2/u_e_oKbTQzmOB5tD1abbx?rect=510,680,514,400&amp;w=840&amp;auto=format&amp;q=80" alt="Two pickleball paddles and balls on a green court" loading="lazy"><p>good friends, good rallies</p></figure>
     </section>
 
     <section class="sec">
-      <h2>How it plays</h2>
+      <h2>How we roll</h2>
       <div class="card">
         <ol class="steps">
-          <li><div><b>Teams of two.</b> Flying solo? RSVP anyway and we'll pair you with a partner.</div></li>
+          <li><div><b>Teams of two.</b> Flying solo? RSVP anyway and we'll find you a pickle partner.</div></li>
           <li><div><b>Be checked in by 5:40.</b> Warm up. Play starts promptly at 6:00.</div></li>
           <li><div><b>Finish a match, enter your score on this site.</b> It sends you to your next opponent and court.</div></li>
           <li><div><b>Winners play winners.</b> No rematches, and everyone plays before anyone plays again.</div></li>
-          <li><div><b>Scores stay sealed.</b> Nobody sees the standings until the big reveal at 8, when the prizes come out.</div></li>
+          <li><div><b>Scores stay sealed tighter than a pickle jar.</b> Nobody sees the standings until the big reveal at 8, when the prizes come out.</div></li>
         </ol>
       </div>
     </section>
 
     <section class="sec">
       <div class="policy">
-        <div class="eyebrow">The official policy</div>
+        <div class="eyebrow">The official pickle-cy</div>
         <div class="big">Alcohol is not allowed at the courts.</div>
         <div class="wink">That said… nobody will be checking your water bottles.
           <small>We encourage a good time. Be respectful of the people around us and don't raise suspicion.</small></div>
@@ -344,15 +384,15 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
     <section class="sec">
       <a class="teaser" href="#learn" onclick="go('learn');return false">
         <img src="https://partiful.imgix.net/external/user/xKdp9kHFMxVZspvpet8hrsXzMhr2/u_e_oKbTQzmOB5tD1abbx?rect=0,500,345,520&amp;w=300&amp;auto=format&amp;q=80" alt="A basket of pickleballs" loading="lazy">
-        <div><h3>Never played pickleball?</h3><p>Three short videos and the rules in pictures. Ten minutes and you're ready.</p><span class="btn sm">Learn the game →</span></div>
+        <div><h3>Never played? No big dill.</h3><p>Three short videos and the rules in pictures. Ten minutes and you're ready to dink.</p><span class="btn sm">Learn the game →</span></div>
       </a>
     </section>
 
     <section class="sec">
       <div class="card" style="text-align:center">
         <div class="eyebrow">After the final point</div>
-        <h2 style="margin:6px 0 4px;font-size:34px">Drinks nearby</h2>
-        <p>Location TBD. We'll post it here.</p>
+        <h2 style="margin:6px 0 4px;font-size:34px">Then we get pickled</h2>
+        <p>Drinks nearby. Location TBD, we'll post it here.</p>
       </div>
     </section>
 
@@ -363,7 +403,7 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
 <!-- ================= RSVP ================= -->
 <section id="p-rsvp" class="hidden">
   <div class="wrap">
-    <div class="pagehead"><h1>RSVP</h1><p>Register your team by <b>Thursday, Oct 15 at midnight.</b> <span id="deadlineCount2"></span></p></div>
+    <div class="pagehead"><h1>RSVP</h1><p>Get in the jar by <b>Thursday, Oct 15 at midnight.</b> <span id="deadlineCount2"></span></p></div>
 
     <div id="regClosed" class="card hidden" style="margin-top:16px"><h2 style="font-size:30px">RSVPs are closed</h2><p style="margin-top:6px">Text Isa or Avi and we'll squeeze you in.</p></div>
 
@@ -386,7 +426,7 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
         <div class="seg"><label><input type="radio" name="tPad" value="0" checked><span>We're set</span></label><label><input type="radio" name="tPad" value="1"><span>Need 1</span></label><label><input type="radio" name="tPad" value="2"><span>Need 2</span></label></div>
         <label for="tNote">Note for Isa &amp; Avi <span class="note">(optional)</span></label><textarea id="tNote" maxlength="200" placeholder="Need balls too? Running late? Tell us here."></textarea>
         <div class="err" id="eTeam"></div>
-        <button class="btn block" style="margin-top:16px;font-size:19px;padding:15px" type="submit">RSVP our team</button>
+        <button class="btn block" style="margin-top:16px;font-size:19px;padding:15px" type="submit">Dill us in</button>
         <p class="note" style="margin-top:10px">Phone and email go only to Isa &amp; Avi, for event updates.</p>
       </form>
 
@@ -400,13 +440,13 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
         <div class="seg"><label><input type="radio" name="sPad" value="0" checked><span>I have one</span></label><label><input type="radio" name="sPad" value="1"><span>Yes please</span></label></div>
         <label for="sNote">Note for Isa &amp; Avi <span class="note">(optional)</span></label><textarea id="sNote" maxlength="200" placeholder="Lefty? Love to lob? Need balls?"></textarea>
         <div class="err" id="eSolo"></div>
-        <button class="btn block" style="margin-top:16px;font-size:19px;padding:15px" type="submit">Pair me up</button>
+        <button class="btn block" style="margin-top:16px;font-size:19px;padding:15px" type="submit">Find me a pickle partner</button>
         <p class="note" style="margin-top:10px">We'll match you with another solo player and tell you your team before Saturday. Phone and email go only to Isa &amp; Avi.</p>
       </form>
     </div>
 
     <section class="sec">
-      <h2 style="font-size:34px">Who's in</h2>
+      <h2 style="font-size:34px">Who's in the jar</h2>
       <p class="note" id="whoCount">Loading…</p>
       <ul class="teams" id="whoList"></ul>
     </section>
@@ -416,10 +456,10 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
 <!-- ================= LEARN ================= -->
 <section id="p-learn" class="hidden">
   <div class="wrap">
-    <div class="pagehead"><h1>New to pickleball?</h1><p>Watch one video, skim the rules, and you're ready for Saturday.</p></div>
+    <div class="pagehead"><h1>New to pickleball? No big dill.</h1><p>Watch one video, skim the rules, and you're ready for Saturday.</p></div>
 
     <section class="sec">
-      <h2 style="font-size:32px">Watch</h2>
+      <h2 style="font-size:32px">Watch &amp; dink</h2>
       <div class="vids">
         <a class="vid" href="https://www.youtube.com/watch?v=pDDwZgepQeE" target="_blank" rel="noopener"><div class="th"><img src="https://i.ytimg.com/vi/pDDwZgepQeE/hqdefault.jpg" alt="" loading="lazy"></div><div><b>How to Play Pickleball in 5 Minutes</b><span>PlayPickleball.com · start here</span></div></a>
         <a class="vid" href="https://www.youtube.com/watch?v=pU_wzWOzGoY" target="_blank" rel="noopener"><div class="th"><img src="https://i.ytimg.com/vi/pU_wzWOzGoY/hqdefault.jpg" alt="" loading="lazy"></div><div><b>How To Play Pickleball For Beginners: Rules and Scoring Explained</b><span>Briones Pickleball Academy</span></div></a>
@@ -457,7 +497,7 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
     </section>
 
     <section class="sec">
-      <h2 style="font-size:32px">The rules</h2>
+      <h2 style="font-size:32px">Rules to relish</h2>
       <div class="rules">
         <div class="rule"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#E3F25B"/><path d="M14 46c10-2 22-12 30-28" fill="none" stroke="#173322" stroke-width="3.5" stroke-dasharray="6 5" stroke-linecap="round"/><path d="M38 18l7-2 0 8" fill="none" stroke="#173322" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><g transform="rotate(35 18 48)"><rect x="12" y="38" width="12" height="15" rx="5" fill="#F7BDD2" stroke="#173322" stroke-width="2.5"/><rect x="16" y="52" width="4" height="8" rx="2" fill="#173322"/></g></svg><div><b>Serve underhand, crosscourt</b><p>Hit below your waist from behind the baseline. Aim diagonally, past the kitchen. You get one try.</p></div></div>
         <div class="rule"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#F7BDD2"/><path d="M8 40c6-24 12-24 16 0c5-22 11-22 16 0c4-14 10-16 16-10" fill="none" stroke="#173322" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="44" r="5" fill="#E3F25B" stroke="#173322" stroke-width="2.5"/><circle cx="40" cy="44" r="5" fill="#E3F25B" stroke="#173322" stroke-width="2.5"/><text x="24" y="58" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="800" font-size="9" fill="#173322">1</text><text x="40" y="58" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="800" font-size="9" fill="#173322">2</text></svg><div><b>Let it bounce twice</b><p>The return of serve must bounce, and so must the next shot back. After those two bounces, volleys are fair game.</p></div></div>
@@ -576,7 +616,7 @@ window.addEventListener('hashchange', function () { var h = location.hash.slice(
 
 function schedulePoll() {
   clearTimeout(S.timer);
-  var ms = S.page === 'game' || S.page === 'admin' ? 5000 : 45000;
+  var ms = S.page === 'game' || S.page === 'admin' ? 5000 : 20000;
   if (document.hidden) ms = 60000;
   S.timer = setTimeout(function () { refresh().then(schedulePoll, schedulePoll); }, ms);
 }
@@ -604,6 +644,7 @@ function render(prev) {
   $('whoCount').textContent = v.teams.length + (v.teams.length === 1 ? ' team' : ' teams') + (v.soloCount ? ' + ' + v.soloCount + ' solo player' + (v.soloCount > 1 ? 's' : '') + ' looking for a partner' : '') + ' so far.';
   $('whoList').innerHTML = v.teams.map(function (t) { return '<li><div><b>' + esc(t.name) + '</b><span>' + esc(t.p1) + ' &amp; ' + esc(t.p2) + '</span></div></li>'; }).join('');
   renderGame(prev);
+  renderSmack(v.comments);
   if (v.meta.revealed && v.standings && !S.revealSeen && store('bdi_reveal_seen') !== String(v.meta.startedAt) && (S.page === 'game' || S.page === 'home')) {
     S.revealSeen = true; store('bdi_reveal_seen', String(v.meta.startedAt));
     playReveal();
@@ -647,7 +688,7 @@ function renderGame(prev) {
 
   if (v.meta.revealed) {
     var pos = v.standings ? v.standings.findIndex(function (s) { return s.id === my.id; }) : -1;
-    h = '<div class="card" style="text-align:center"><h2 style="font-size:32px">That\'s a wrap!</h2>' + (pos >= 0 ? '<p style="font-size:20px;margin-top:6px">You finished <b>#' + (pos + 1) + '</b> of ' + v.standings.length + '.</p>' : '') + '<p class="note" style="margin-top:6px">Now go get that drink.</p></div>';
+    h = '<div class="card" style="text-align:center"><h2 style="font-size:32px">That\'s a wrap!</h2>' + (pos >= 0 ? '<p style="font-size:20px;margin-top:6px">You finished <b>#' + (pos + 1) + '</b> of ' + v.standings.length + '.</p>' : '') + '<p class="note" style="margin-top:6px">Now go get pickled.</p></div>';
   } else if (my.status === 'unchecked') {
     h = '<div class="card" style="text-align:center"><h2 style="font-size:30px">Here at the courts?</h2><p style="margin-top:6px">Check in by <b>5:40 PM</b> so you get your first matchup.</p>' +
       (v.meta.checkinOpen ? '<button class="btn block" style="margin-top:14px;font-size:19px;padding:15px" onclick="checkIn()">We\'re here — check us in</button>'
@@ -661,13 +702,13 @@ function renderGame(prev) {
       '<div class="err" id="eScore"></div><button class="btn block" style="margin-top:14px" onclick="confirmScore()">Lock in the score</button></div>';
   } else if (my.status === 'waiting') {
     h = '<div class="card" style="text-align:center">' + lastLine(my) +
-      '<div class="ballspin">' + BALL + '</div><h2 style="font-size:28px;margin-bottom:4px">Finding your next opponent…</h2>' +
+      '<div class="ballspin">' + BALL + '</div><h2 style="font-size:28px;margin-bottom:4px">Finding your next victim…</h2>' +
       '<p>' + (my.queue ? 'You\'re <b>#' + my.queue + '</b> in line. ' : '') + 'Keep this page open. It updates on its own.</p>' +
       '<div class="bigstat"><div><b>' + my.games + '</b><span>games played</span></div><div><b>' + v.waiting.length + '</b><span>teams waiting</span></div></div></div>';
   } else if (my.status === 'done') {
     h = '<div class="card" style="text-align:center">' + lastLine(my) + '<h2 style="font-size:28px">No more new matches</h2><p>Finish what\'s on court. Results get revealed shortly.</p></div>';
   } else {
-    h = '<div class="card" style="text-align:center"><div class="ballspin">' + BALL + '</div><h2 style="font-size:28px">You\'re checked in</h2><p>First matchups go out at <b>6:00 PM</b>. Keep this page open. Your court shows up here.</p></div>';
+    h = '<div class="card" style="text-align:center"><div class="ballspin">' + BALL + '</div><h2 style="font-size:28px">You\'re in the jar</h2><p>First matchups go out at <b>6:00 PM</b>. Keep this page open. Your court shows up here.</p></div>';
   }
   var keep = $('myState').querySelector('.stepper') && my.status === 'playing' && prev && prev.my && prev.my.match && prev.my.match.id === my.match.id;
   if (!keep) $('myState').innerHTML = h;
@@ -727,7 +768,7 @@ function sendScore(me, them) {
   unlockAudio();
   $('lockBtn').disabled = true; $('lockBtn').textContent = 'Sealing…';
   call('submitScore', S.team, S.view.my.match.id, me, them).then(function (v) {
-    closeModal(); var prev = S.view; S.view = v; $('myState').innerHTML = ''; render(prev); toast('Score sealed 🤫');
+    closeModal(); var prev = S.view; S.view = v; $('myState').innerHTML = ''; render(prev); toast('Score sealed tighter than a pickle jar 🤫');
   }).catch(function (e) { closeModal(); toast(cleanErr(e)); });
 }
 
@@ -769,6 +810,43 @@ function submitReg(ev, kind) {
   return false;
 }
 
+/* ============================== smack talk ============================== */
+function ago(t) {
+  var s = Math.max(0, Math.round((now() - t) / 1000)); if (s < 60) return 'just now';
+  var m = Math.round(s / 60); if (m < 60) return m + 'm ago';
+  var h = Math.round(m / 60); if (h < 24) return h + 'h ago';
+  return Math.round(h / 24) + 'd ago';
+}
+function firedSet() { try { return JSON.parse(store('bdi_fired') || '{}') || {}; } catch (e) { return {}; } }
+function renderSmack(list) {
+  if (!list) return;
+  S.comments = list;
+  var fired = firedSet();
+  $('smFeed').innerHTML = list.length ? list.map(function (c) {
+    return '<div class="bubble"><div class="bh"><b>' + esc(c.name) + '</b>' + (c.team ? '<span class="tm">' + esc(c.team) + '</span>' : '') + '<span class="when">' + ago(c.at) + '</span></div>' +
+      '<p>' + esc(c.text) + '</p><button type="button" class="fire' + (fired[c.id] ? ' on' : '') + '" onclick="fire(\'' + c.id + '\')" aria-label="Fire">🔥 ' + (c.fire || '') + '</button></div>';
+  }).join('') : '<p class="empty">No smack yet. Be the first.</p>';
+}
+function updCount() { $('smCount').textContent = (200 - $('smText').value.length) + ' left'; }
+function postSmack(ev) {
+  ev.preventDefault();
+  var n = $('smName').value.trim(), t = $('smText').value.trim(), err = $('eSmack'), b = ev.target.querySelector('button');
+  err.textContent = '';
+  if (!n) { err.textContent = 'Add your name.'; $('smName').focus(); return false; }
+  if (!t) { err.textContent = 'Say something first.'; $('smText').focus(); return false; }
+  store('bdi_name', n); b.disabled = true;
+  call('postComment', { name: n, text: t }, S.team).then(function (list) {
+    b.disabled = false; $('smText').value = ''; updCount(); renderSmack(list); $('smFeed').scrollTop = 0;
+  }).catch(function (e) { b.disabled = false; err.textContent = cleanErr(e); });
+  return false;
+}
+function fire(id) {
+  var f = firedSet(); if (f[id] || !S.comments) return;
+  f[id] = 1; store('bdi_fired', JSON.stringify(f));
+  renderSmack(S.comments.map(function (c) { return c.id === id ? Object.assign({}, c, { fire: (c.fire || 0) + 1 }) : c; }));
+  call('fireComment', id).then(renderSmack).catch(function () {});
+}
+
 /* ============================== overlays ============================== */
 function modal(html) { $('overlay').innerHTML = '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="card">' + html + '</div></div>'; }
 function closeModal() { $('overlay').innerHTML = ''; }
@@ -776,7 +854,7 @@ function closeModal() { $('overlay').innerHTML = ''; }
 function takeover(m) {
   chime();
   try { navigator.vibrate && navigator.vibrate([250, 120, 250, 120, 400]); } catch (e) {}
-  modal('<div style="text-align:center"><h2 style="font-size:46px">You\'re up!</h2>' +
+  modal('<div style="text-align:center"><h2 style="font-size:46px">You\'re up!</h2><p class="marker" style="font-size:20px;margin-top:2px">Time to dill-iver.</p>' +
     '<p style="font-size:19px;margin-top:8px">Go find <b>' + esc(m.opp.name) + '</b><br><span class="note">' + esc(m.opp.p1) + ' &amp; ' + esc(m.opp.p2) + '</span></p>' +
     '<div class="court-big" style="margin-top:14px"><div class="lbl">COURT</div><div class="num">' + m.court + '</div></div>' +
     '<button class="btn court block" style="margin-top:16px" onclick="closeModal()">On our way</button></div>');
@@ -822,7 +900,7 @@ function playReveal() {
     var champ = r.classList.contains('champ');
     setTimeout(function () {
       r.classList.add('in');
-      if (champ) { confetti(160); chime(); el.querySelector('h2').innerHTML = 'Your champions!'; el.scrollTo({ top: 0, behavior: 'smooth' }); }
+      if (champ) { confetti(160); chime(); el.querySelector('h2').innerHTML = 'Your big dills!'; el.scrollTo({ top: 0, behavior: 'smooth' }); }
     }, 900 + k * 750 + (champ ? 1600 : 0));
   });
 }
@@ -935,6 +1013,13 @@ function renderAdmin(force) {
     }).join('') + '</table></div><p class="note" style="margin-top:8px">Ranked by win %, then average point differential.</p>' : '<p class="note">Hidden. Tap “Peek at scores” to see.</p>') + '</div>';
   }
 
+  if (a.comments && a.comments.length) {
+    h += '<div class="card"><h2 style="font-size:28px">Smack talk (' + a.comments.length + ')</h2>' + a.comments.map(function (c) {
+      return '<div class="row" style="justify-content:space-between;flex-wrap:nowrap;border-bottom:1.5px solid #E2DCC8;padding:8px 0"><div style="min-width:0"><b>' + esc(c.name) + '</b> <span class="note">' + esc(c.team || '') + '</span><p class="note" style="overflow-wrap:anywhere">' + esc(c.text) + '</p></div>' +
+        '<button class="btn sm ghost" onclick="act(\'deleteComment\',{id:\'' + c.id + '\'},\'Delete this comment?\')">Delete</button></div>';
+    }).join('') + '</div>';
+  }
+
   h += '<div class="card"><h2 style="font-size:28px">Danger zone</h2><div class="row" style="margin-top:8px">' +
     '<button class="btn sm ghost" onclick="act(\'resetTournament\',{},\'Erase ALL matches and scores, keep teams?\')">Reset matches</button>' +
     '<button class="btn sm ghost" onclick="if(prompt(\'Type WIPE to erase every team, solo player and match.\')===\'WIPE\')act(\'wipeAll\')">Wipe everything</button>' +
@@ -970,6 +1055,8 @@ function copyList(kind) {
 /* ============================== boot ============================== */
 (function boot() {
   S.team = store('bdi_team'); S.code = store('bdi_code');
+  $('smName').value = store('bdi_name') || '';
+  $('smText').addEventListener('input', updCount);
   var p = location.hash.slice(1);
   if (PAGES.indexOf(p) < 0) p = (Date.now() > START_TIME - 4 * 3600000 && Date.now() < END_TIME + 3 * 3600000) ? 'game' : 'home';
   go(p);
