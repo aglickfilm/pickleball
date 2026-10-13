@@ -135,6 +135,13 @@ h1,h2{font-family:var(--display);font-weight:900;line-height:1.02;letter-spacing
   #p-home .home-grid > .smack{grid-column:2;grid-row:1 / span 12;position:sticky;top:16px}
   .feed{max-height:calc(100vh - 380px)}
 }
+/* drinks */
+.drinks{text-align:center;background:var(--pink);padding:30px 18px 26px;transform:rotate(-1deg);box-shadow:7px 7px 0 var(--court-d)}
+.drinks svg{width:104px;height:104px;display:block;margin:0 auto 4px}
+.drinks .eyebrow{color:var(--ink)}
+.drinks h2{font-size:clamp(46px,12vw,76px);line-height:.95;margin:8px 0 12px;color:var(--ink)}
+.drinks-sub{font-size:27px;line-height:1.15;font-weight:800;color:var(--ink)}
+.drinks .marker{font-size:23px;color:var(--court-d);margin-top:8px;display:block}
 /* what to bring */
 .bring{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
 .item{background:var(--paper);border:2.5px solid var(--ink);border-radius:18px;padding:12px 12px 14px;text-align:center;min-width:0}
@@ -389,10 +396,12 @@ footer button{background:none;border:0;color:var(--ink2);text-decoration:underli
     </section>
 
     <section class="sec">
-      <div class="card" style="text-align:center">
+      <div class="card drinks">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><g stroke="#173322" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"><path d="M22 30h34l-6 34a11 11 0 0 1-22 0z" fill="#E3F25B" transform="rotate(-14 39 60)"/><path d="M39 75v26M29 101h20" fill="none" transform="rotate(-14 39 60)"/><path d="M64 30h34l-6 34a11 11 0 0 1-22 0z" fill="#FFFCF4" transform="rotate(14 81 60)"/><path d="M81 75v26M71 101h20" fill="none" transform="rotate(14 81 60)"/><path d="M60 8v10M48 12l5 8M72 12l-5 8" fill="none"/></g></svg>
         <div class="eyebrow">After the final point</div>
-        <h2 style="margin:6px 0 4px;font-size:34px">Then we get pickled</h2>
-        <p>Drinks nearby. Location TBD, we'll post it here.</p>
+        <h2>Then we get pickled</h2>
+        <p class="drinks-sub">Drinks nearby, right after the 8 PM reveal.</p>
+        <span class="marker">Location TBD. We'll post it here.</span>
       </div>
     </section>
 
