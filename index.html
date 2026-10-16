@@ -162,6 +162,17 @@ h1,h2{font-family:var(--display);font-weight:900;line-height:1.02;letter-spacing
 .tcard .btn.sm{flex:0 0 auto;padding:5px 12px;font-size:13px}
 .jar-link{display:flex;justify-content:space-between;align-items:center;gap:12px;text-decoration:none;color:inherit;margin-top:12px}
 .jar-link b{font-family:var(--display);font-weight:900;font-size:24px;display:block}
+/* score confirmation + test mode */
+.sl{border:2.5px solid var(--ink);border-radius:14px;overflow:hidden;margin:10px 0;text-align:left}
+.sl div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px;background:var(--white);font-weight:700;color:var(--ink)}
+.sl div+div{border-top:2px solid #E2DCC8}
+.sl span{min-width:0;overflow-wrap:anywhere}
+.sl b{font-family:var(--display);font-size:30px;font-weight:900;line-height:1.1}
+.sl .w{background:var(--lime)} .sl .w span:after{content:" · winner";font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--court)}
+.confirm{border-color:var(--pink-d);box-shadow:5px 5px 0 var(--pink-d);margin-bottom:16px}
+.testbar{position:sticky;top:0;z-index:45;background:#B3123E;color:#fff;text-align:center;font-weight:800;font-size:14px;padding:7px 10px}
+.testbar a{color:#fff;margin-left:8px}
+@media (min-width:900px){ .testbar{top:72px} }
 /* what to bring */
 .bring{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
 .item{background:var(--paper);border:2.5px solid var(--ink);border-radius:18px;padding:12px 12px 14px;text-align:center;min-width:0}
@@ -655,7 +666,9 @@ var BALL = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" 
 function $(id) { return document.getElementById(id); }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
 var MEM = {};
+var TEST = /[?&]test\b/.test(location.search);
 function store(k, v) {
+  if (TEST) k = 't_' + k;
   try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }
   catch (e) { if (v === undefined) return MEM[k] == null ? null : MEM[k]; if (v === null) delete MEM[k]; else MEM[k] = v; }
   return null;
@@ -666,8 +679,8 @@ function toast(msg) { var t = document.createElement('div'); t.className = 'toas
 
 function call(fn) {
   var args = Array.prototype.slice.call(arguments, 1);
-  if (window.__mockCall) return window.__mockCall(fn, args);
-  return fetch(API_URL, { method: 'POST', body: JSON.stringify({ fn: fn, args: args }), credentials: 'omit', redirect: 'follow' })
+  if (window.__mockCall) return window.__mockCall(fn, args, TEST);
+  return fetch(API_URL, { method: 'POST', body: JSON.stringify({ fn: fn, args: args, test: TEST }), credentials: 'omit', redirect: 'follow' })
     .then(function (r) { if (!r.ok) throw new Error('Connection hiccup. Try again.'); return r.json(); })
     .then(function (j) { if (!j.ok) throw new Error(j.error || 'Something went wrong'); return j.data; },
           function (e) { throw new Error(/Connection/.test(e.message) ? e.message : 'Can\'t reach the server. Check your signal and try again.'); });
@@ -680,7 +693,7 @@ function go(p, keepScroll) {
   PAGES.forEach(function (x) { $('p-' + x).classList.toggle('hidden', x !== p); });
   document.querySelectorAll('nav.tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.p === p); });
   if (!keepScroll) window.scrollTo(0, 0);
-  try { history.replaceState(null, '', p === 'home' ? location.pathname : '#' + p); } catch (e) {}
+  try { history.replaceState(null, '', p === 'home' ? location.pathname + location.search : '#' + p); } catch (e) {}
   refresh();
   schedulePoll();
 }
@@ -706,8 +719,10 @@ function refresh() {
 }
 
 /* ============================== render ============================== */
+function rankPts(list) { if (list) list.sort(function (a, b) { return b.pf - a.pf || a.pa - b.pa || b.w - a.w || a.name.localeCompare(b.name); }); }
 function render(prev) {
   var v = S.view; if (!v) return;
+  rankPts(v.standings);
   var left = v.meta.deadline - now();
   var cd = left > 0 ? 'Closes in ' + dur(left) + '.' : '';
   $('deadlineCount').textContent = cd; $('deadlineCount2').textContent = cd;
@@ -733,7 +748,7 @@ function mins(t) { return Math.max(0, Math.floor((now() - t) / 60000)) + ' min';
 function renderGame(prev) {
   var v = S.view; if (!v) return;
   var t = now();
-  $('clock').textContent = v.meta.revealed ? 'Final' : v.meta.phase === 'live' ? (t < END_TIME ? dur(END_TIME - t) + ' left' : 'Last games') : 'Starts 6:00 PM';
+  $('clock').textContent = TEST && !v.meta.revealed ? 'Test run' : v.meta.revealed ? 'Final' : v.meta.phase === 'live' ? (t < END_TIME ? dur(END_TIME - t) + ' left' : 'Last games') : 'Starts 6:00 PM';
   $('roundPill').textContent = v.meta.phase === 'live' ? 'Round ' + v.meta.round : v.teams.filter(function (x) { return x.checked; }).length + ' checked in';
   $('courtGrid').innerHTML = v.courts.map(function (c) {
     if (c.off) return '<div class="ct off"><div class="c">' + c.court + '</div><div class="t">Closed</div></div>';
@@ -747,7 +762,7 @@ function renderGame(prev) {
   if (v.standings) {
     $('gStand').innerHTML = '<div class="row" style="justify-content:space-between"><h2 style="font-size:28px">Final standings</h2><button class="btn sm" onclick="playReveal()">Replay reveal</button></div>' +
       '<ul class="teams">' + v.standings.map(function (s, i) {
-        return '<li><div><b>' + (i + 1) + '. ' + esc(s.name) + '</b><span>' + esc(s.p1) + ' &amp; ' + esc(s.p2) + '</span></div><div style="text-align:right"><b>' + s.w + '–' + s.l + '</b><span>' + (s.pd > 0 ? '+' : '') + s.pd + ' pts</span></div></li>';
+        return '<li><div><b>' + (i + 1) + '. ' + esc(s.name) + '</b><span>' + esc(s.p1) + ' &amp; ' + esc(s.p2) + '</span></div><div style="text-align:right"><b>' + s.pf + ' pts</b><span>' + s.w + '–' + s.l + ' · ' + s.gp + ' games</span></div></li>';
       }).join('') + '</ul>';
   }
 
@@ -771,8 +786,8 @@ function renderGame(prev) {
     h = '<div class="court-big"><div class="lbl">YOUR COURT</div><div class="num">' + m.court + '</div>' +
       '<div class="vs"><span class="note">Game ' + m.game + ' · vs</span><b>' + esc(m.opp.name) + '</b><span class="note">' + esc(m.opp.p1) + ' &amp; ' + esc(m.opp.p2) + '</span></div></div>' +
       '<p class="house-mini">🤐 House rule: say your partner\'s first name, lose a point.</p>' +
-      '<div class="card" style="margin-top:16px"><h2 style="font-size:28px">Final score</h2><p class="note">Only one team needs to enter it. Scores stay sealed.</p>' +
-      '<div class="stepper">' + side('me', 'You') + side('them', m.opp.name) + '</div>' +
+      '<div class="card" style="margin-top:16px"><h2 style="font-size:28px">Final score</h2><p class="note">Both teams enter it. The first one in frees the court; the other team confirms. Scores stay sealed.</p>' +
+      '<div class="stepper">' + side('me', my.name) + side('them', m.opp.name) + '</div>' +
       '<div class="err" id="eScore"></div><button class="btn block" style="margin-top:14px" onclick="confirmScore()">Lock in the score</button></div>';
   } else if (my.status === 'waiting') {
     h = '<div class="card" style="text-align:center">' + lastLine(my) +
@@ -784,7 +799,9 @@ function renderGame(prev) {
   } else {
     h = '<div class="card" style="text-align:center"><div class="ballspin">' + BALL + '</div><h2 style="font-size:28px">You\'re in the jar</h2><p>First matchups go out at <b>6:00 PM</b>. Keep this page open. Your court shows up here.</p></div>';
   }
-  var keep = $('myState').querySelector('.stepper') && my.status === 'playing' && prev && prev.my && prev.my.match && prev.my.match.id === my.match.id;
+  h = confirmCard(my) + h;
+  var cid = function (x) { return x && x.confirm ? x.confirm.id : ''; };
+  var keep = $('myState').querySelector('.stepper') && my.status === 'playing' && prev && prev.my && prev.my.match && prev.my.match.id === my.match.id && cid(prev.my) === cid(my);
   if (!keep) $('myState').innerHTML = h;
 
   if (my.status === 'playing' && S.seen !== my.match.id && store('bdi_seen') !== my.match.id) {
@@ -794,10 +811,10 @@ function renderGame(prev) {
 }
 
 function lastLine(my) {
-  if (!my.last) return '';
+  if (!my.last || my.confirm) return '';
   var won = my.last.me > my.last.them;
   return '<p class="pill ' + (won ? 'ok' : 'no') + '" style="margin-bottom:10px">Sealed ✔ ' + my.last.me + '–' + my.last.them + ' vs ' + esc(my.last.opp) + '</p>' +
-    (my.last.byOpp ? '<p class="note">' + esc(my.last.opp) + ' entered it. Something off? Find Isa or Avi.</p>' : '');
+    '';
 }
 
 function side(k, who) {
@@ -829,21 +846,62 @@ function checkIn() {
   call('checkIn', S.team).then(function (v) { S.view = v; render(); toast('Checked in. See you on court!'); }).catch(function (e) { toast(cleanErr(e)); });
 }
 
+function scoreTable(a, sa, b, sb) {
+  return '<div class="sl"><div class="' + (sa > sb ? 'w' : '') + '"><span>' + esc(a) + '</span><b>' + sa + '</b></div><div class="' + (sb > sa ? 'w' : '') + '"><span>' + esc(b) + '</span><b>' + sb + '</b></div></div>';
+}
+function confirmCard(my) {
+  var c = my.confirm; if (!c) return '';
+  return '<div class="card confirm"><div class="eyebrow">Confirm your last match</div>' + scoreTable(c.a, c.sa, c.b, c.sb) +
+    '<p class="note">' + esc(c.by) + ' entered this. Is it right?</p><div class="row" style="margin-top:12px"><button class="btn ghost" style="flex:1" onclick="fixScore()">No, fix it</button><button class="btn" style="flex:1" id="okBtn" onclick="okScore()">Yes, correct</button></div></div>';
+}
 function confirmScore() {
   var me = $('sc_me').value, them = $('sc_them').value, my = S.view.my;
   $('eScore').textContent = '';
   if (me === '' || them === '') { $('eScore').textContent = 'Enter both scores.'; return; }
   if (+me === +them) { $('eScore').textContent = 'Scores can\'t be tied.'; return; }
-  modal('<h2 style="font-size:28px">Lock it in?</h2><div class="bigstat"><div><b>' + (+me) + '</b><span>' + esc(my.name) + '</span></div><div><b>' + (+them) + '</b><span>' + esc(my.match.opp.name) + '</span></div></div>' +
-    '<p class="note">Once it\'s in, only Isa or Avi can change it.</p>' +
+  modal('<h2 style="font-size:28px">Lock it in?</h2><p class="note" style="margin-top:4px">Check both team names and scores.</p>' + scoreTable(my.name, +me, my.match.opp.name, +them) +
+    '<p class="note">' + esc(my.match.opp.name) + ' will be asked to confirm it.</p>' +
     '<div class="row" style="margin-top:14px"><button class="btn ghost" style="flex:1" onclick="closeModal()">Edit</button><button class="btn" style="flex:1" id="lockBtn" onclick="sendScore(' + (+me) + ',' + (+them) + ')">Lock it in</button></div>');
 }
 function sendScore(me, them) {
   unlockAudio();
   $('lockBtn').disabled = true; $('lockBtn').textContent = 'Sealing…';
-  call('submitScore', S.team, S.view.my.match.id, me, them).then(function (v) {
+  var mid = S.view.my.match.id;
+  call('submitScore', S.team, mid, me, them).then(function (v) {
+    if (v.mismatch) return showMismatch(v, me, them);
     closeModal(); var prev = S.view; S.view = v; $('myState').innerHTML = ''; render(prev); toast('Score sealed tighter than a pickle jar 🤫');
   }).catch(function (e) { closeModal(); toast(cleanErr(e)); });
+}
+function okScore() {
+  var c = S.view.my.confirm; $('okBtn').disabled = true;
+  submitConfirm(c.id, c.mineA ? c.sa : c.sb, c.mineA ? c.sb : c.sa, false);
+}
+function fixScore() {
+  var c = S.view.my.confirm, my = S.view.my;
+  modal('<h2 style="font-size:28px">What was the score?</h2><p class="note" style="margin-top:4px">' + esc(c.a) + ' vs ' + esc(c.b) + '</p>' +
+    '<div class="stepper">' + side('fme', my.name) + side('fthem', c.mineA ? c.b : c.a) + '</div><div class="err" id="eFix"></div>' +
+    '<div class="row" style="margin-top:14px"><button class="btn ghost" style="flex:1" onclick="closeModal()">Cancel</button><button class="btn" style="flex:1" id="fixBtn" onclick="sendFix()">Send</button></div>');
+}
+function sendFix() {
+  var c = S.view.my.confirm, me = $('sc_fme').value, them = $('sc_fthem').value;
+  if (me === '' || them === '') { $('eFix').textContent = 'Enter both scores.'; return; }
+  if (+me === +them) { $('eFix').textContent = 'Scores can\'t be tied.'; return; }
+  $('fixBtn').disabled = true;
+  submitConfirm(c.id, +me, +them, false);
+}
+function submitConfirm(id, me, them, force) {
+  call('submitScore', S.team, id, me, them, force).then(function (v) {
+    if (v.mismatch) return showMismatch(v, me, them);
+    closeModal(); var prev = S.view; S.view = v; $('myState').innerHTML = ''; render(prev);
+    toast(force ? 'Sent. Isa & Avi will settle it.' : 'Confirmed ✔');
+  }).catch(function (e) { closeModal(); toast(cleanErr(e)); });
+}
+function showMismatch(v, me, them) {
+  var x = v.mismatch, mineA = x.a === S.view.my.name, sa = mineA ? me : them, sb = mineA ? them : me;
+  modal('<h2 style="font-size:28px">⚠ These don\'t match</h2><p style="margin-top:8px"><b>' + esc(x.by) + '</b> entered:</p>' + scoreTable(x.a, x.sa, x.b, x.sb) +
+    '<p><b>You</b> entered:</p>' + scoreTable(x.a, sa, x.b, sb) +
+    '<p class="note">Double-check with them. If you\'re sure, send yours and Isa &amp; Avi will settle it.</p>' +
+    '<div class="row" style="margin-top:14px"><button class="btn ghost" style="flex:1" onclick="closeModal();refresh()">Go back</button><button class="btn" style="flex:1" onclick="submitConfirm(\'' + x.id + '\',' + me + ',' + them + ',true)">Send mine anyway</button></div>');
 }
 
 function setKind(k) {
@@ -1016,7 +1074,7 @@ function playReveal() {
   var el = document.createElement('div'); el.className = 'reveal';
   el.innerHTML = '<h2>The envelope,<br>please…</h2><div class="rows">' + st.map(function (s, i) {
     return '<div class="rrow' + (i === 0 ? ' champ' : '') + '"><div class="rk">' + (i === 0 ? '🏆' : i + 1) + '</div><div class="nm"><b>' + esc(s.name) + '</b><span>' + esc(s.p1) + ' &amp; ' + esc(s.p2) + '</span></div>' +
-      '<div class="rec">' + s.w + '–' + s.l + '<span>' + (s.pd > 0 ? '+' : '') + s.pd + ' pts</span></div></div>';
+      '<div class="rec">' + s.pf + ' pts<span>' + s.w + '–' + s.l + ' · ' + s.gp + ' games</span></div></div>';
   }).join('') + '</div><div style="text-align:center;margin-top:24px"><button class="btn" onclick="this.closest(\'.reveal\').remove()">Close</button></div>';
   document.body.appendChild(el);
   var rows = Array.prototype.slice.call(el.querySelectorAll('.rrow')).reverse();
@@ -1053,7 +1111,7 @@ function people(a) {
 }
 
 function renderAdmin(force) {
-  var a = S.admin;
+  var a = S.admin; if (a) rankPts(a.standings);
   $('aLogin').classList.toggle('hidden', !!S.code && !!a);
   $('aBody').classList.toggle('hidden', !S.code || !a);
   if (!S.code || !a) return;
@@ -1087,6 +1145,17 @@ function renderAdmin(force) {
   h += '<label>RSVPs (' + (a.regOpen ? 'open' : 'closed') + ')</label><div class="row">' + modeBtns('regMode', m.regMode) + '</div>';
   h += '<label>Self check-in (' + (a.checkinOpen ? 'open' : 'closed') + ')</label><div class="row">' + modeBtns('checkinMode', m.checkinMode) + '</div>';
   h += '<label>Scores</label><div class="row"><button class="btn sm ' + (S.peek ? 'court' : 'ghost') + '" onclick="togglePeek()">' + (S.peek ? 'Hide scores' : 'Peek at scores') + '</button><span class="note">Hidden by default, since you\'re playing too.</span></div></div>';
+
+  var disputes = done.filter(function (x) { return x.conf === 'dispute'; }), pending = done.filter(function (x) { return x.conf === 'one'; });
+  if (disputes.length) {
+    h += '<div class="card confirm"><h2 style="font-size:28px">⚠ Scores to settle (' + disputes.length + ')</h2><p class="note">The two teams entered different scores. Ask them, then pick one.</p>' + disputes.map(function (x) {
+      return '<div style="border-top:1.5px solid #E2DCC8;margin-top:10px;padding-top:6px">' + [x.a, x.b].map(function (tid) {
+        var r = x.rep[tid]; if (!r) return '';
+        return '<p style="margin-top:6px"><b>' + esc(tid === x.a ? x.an : x.bn) + '</b> says:</p>' + scoreTable(x.an, r[0], x.bn, r[1]) +
+          '<button class="btn sm" onclick="act(\'setScore\',{id:\'' + x.id + '\',sa:' + r[0] + ',sb:' + r[1] + '})">Use this one</button>';
+      }).join('') + '</div>';
+    }).join('') + '</div>';
+  }
 
   // contacts
   h += '<div class="card"><h2 style="font-size:28px">Guests &amp; messages</h2>' +
@@ -1128,16 +1197,16 @@ function renderAdmin(force) {
     : '<p class="note">None waiting for a partner.</p>') + '</div>';
 
   if (done.length) {
-    h += '<div class="card"><h2 style="font-size:28px">Finished (' + done.length + ')</h2><div class="tablewrap"><table>' + done.map(function (x) {
-      return '<tr><td><b>' + x.court + '</b></td><td>' + esc(x.an) + '<br>' + esc(x.bn) + '</td><td class="scr' + blur + '">' + x.sa + '<br>' + x.sb + '</td>' +
+    h += '<div class="card"><h2 style="font-size:28px">Finished (' + done.length + ')</h2><p class="note">✔ both teams agree · ⏳ waiting on the second team (' + pending.length + ') · ⚠ disagreement</p><div class="tablewrap"><table>' + done.map(function (x) {
+      return '<tr><td><b>' + x.court + '</b><br><span class="pill' + (x.conf === 'ok' ? ' ok' : x.conf === 'dispute' ? ' no' : '') + '" title="score status">' + (x.conf === 'ok' ? '✔' : x.conf === 'dispute' ? '⚠' : '⏳') + '</span></td><td>' + esc(x.an) + '<br>' + esc(x.bn) + '</td><td class="scr' + blur + '">' + x.sa + '<br>' + x.sb + '</td>' +
         '<td>' + (S.peek ? '<input type="number" id="da_' + x.id + '" style="width:54px;padding:5px" value="' + x.sa + '"><br><input type="number" id="db_' + x.id + '" style="width:54px;padding:5px;margin-top:3px" value="' + x.sb + '"></td><td><button class="btn sm" onclick="adminScore(\'' + x.id + '\',\'d\')">Fix</button>' : '') + '</td></tr>';
     }).join('') + '</table></div></div>';
   }
 
   if (a.standings.length) {
-    h += '<div class="card"><h2 style="font-size:28px">Standings</h2>' + (S.peek ? '<div class="tablewrap"><table><tr><th>#</th><th>Team</th><th>W–L</th><th>+/-</th></tr>' + a.standings.map(function (s, i) {
-      return '<tr><td>' + (i + 1) + '</td><td>' + esc(s.name) + '</td><td class="scr">' + s.w + '–' + s.l + '</td><td>' + (s.pd > 0 ? '+' : '') + s.pd + '</td></tr>';
-    }).join('') + '</table></div><p class="note" style="margin-top:8px">Ranked by win %, then average point differential.</p>' : '<p class="note">Hidden. Tap “Peek at scores” to see.</p>') + '</div>';
+    h += '<div class="card"><h2 style="font-size:28px">Standings</h2>' + (S.peek ? '<div class="tablewrap"><table><tr><th>#</th><th>Team</th><th>Pts</th><th>W–L</th><th>G</th></tr>' + a.standings.map(function (s, i) {
+      return '<tr><td>' + (i + 1) + '</td><td>' + esc(s.name) + '</td><td class="scr">' + s.pf + '</td><td>' + s.w + '–' + s.l + '</td><td>' + s.gp + '</td></tr>';
+    }).join('') + '</table></div><p class="note" style="margin-top:8px">Ranked by total points won. Ties: fewer points allowed, then more wins.</p>' : '<p class="note">Hidden. Tap “Peek at scores” to see.</p>') + '</div>';
   }
 
   if (a.comments && a.comments.length) {
@@ -1147,6 +1216,14 @@ function renderAdmin(force) {
     }).join('') + '</div>';
   }
 
+  if (TEST) {
+    h += '<div class="card confirm"><h2 style="font-size:28px">🧪 Test tools</h2><p class="note">Test mode only. Real RSVPs are never touched.</p><div class="row" style="margin-top:10px">' +
+      '<button class="btn sm" onclick="act(\'testSeed\',{n:10})">Add 10 fake teams</button>' +
+      '<button class="btn sm" onclick="act(\'testFinish\',{})">Finish all matches</button>' +
+      '<button class="btn sm ghost" onclick="act(\'testFinish\',{leaveOpen:true})">Finish, leave unconfirmed</button>' +
+      '<button class="btn sm ghost" onclick="act(\'testFinish\',{dispute:true})">Finish with a disagreement</button>' +
+      '<button class="btn sm pink" onclick="act(\'wipeAll\',{},\'Erase all TEST data?\')">Wipe test data</button></div></div>';
+  }
   h += '<div class="card"><h2 style="font-size:28px">Danger zone</h2><div class="row" style="margin-top:8px">' +
     '<button class="btn sm ghost" onclick="act(\'resetTournament\',{},\'Erase ALL matches and scores, keep teams?\')">Reset matches</button>' +
     '<button class="btn sm ghost" onclick="if(prompt(\'Type WIPE to erase every team, solo player and match.\')===\'WIPE\')act(\'wipeAll\')">Wipe everything</button>' +
@@ -1182,6 +1259,7 @@ function copyList(kind) {
 
 /* ============================== boot ============================== */
 (function boot() {
+  if (TEST) document.body.insertAdjacentHTML('afterbegin', '<div class="testbar">🧪 TEST MODE · fake data · real RSVPs untouched <a href="' + location.pathname + '">Exit</a></div>');
   S.team = store('bdi_team'); S.code = store('bdi_code');
   $('smName').value = store('bdi_name') || '';
   $('smText').addEventListener('input', updCount);
